@@ -11,6 +11,7 @@ try:
 except ImportError:  # python-dotenv is optional at import time
     pass
 
+
 ROOT = Path(__file__).resolve().parent.parent
 
 

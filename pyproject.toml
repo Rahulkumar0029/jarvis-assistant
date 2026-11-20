@@ -1,0 +1,6 @@
+[tool.pyrefly]
+python-version = "3.12"
+search-paths = [
+    ".",
+    "venv/Lib/site-packages"
+]
