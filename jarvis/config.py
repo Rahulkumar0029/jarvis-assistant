@@ -30,7 +30,7 @@ class Config:
         # AI brain configuration
         self.ai_provider = os.getenv("AI_PROVIDER", "gemini").strip().lower()
         self.gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
-        self.gemini_model = os.getenv("GEMINI_MODEL", "gemini-2.0-flash").strip()
+        self.gemini_model = os.getenv("GEMINI_MODEL", "gemini-flash-lite-latest").strip()
         self.groq_key = os.getenv("GROQ_API_KEY", "").strip()
         self.groq_model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile").strip()
         self.ollama_url = os.getenv("OLLAMA_URL", "http://localhost:11434").strip().rstrip("/")
