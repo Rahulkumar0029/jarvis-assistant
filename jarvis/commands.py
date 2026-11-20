@@ -120,7 +120,7 @@ def h_time(text):
 
 
 def h_open(text):
-    m = re.match(r"^(?:open|launch|start|run)\s+(.+)$", text)
+    m = re.match(r"^(?:please\s+|can you\s+|could you\s+|would you\s+)?(?:open|launch|start|run)\s+(.+)$", text)
     if not m:
         return None
     name = re.sub(r"^(the|my)\s+", "", m.group(1).strip())

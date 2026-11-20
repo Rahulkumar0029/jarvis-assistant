@@ -189,6 +189,7 @@ def _ask_anthropic(text: str, history: list[dict[str, str]]) -> str:
 def ask(text: str, history: list[dict[str, str]] | None = None) -> str:
     """Send text to the configured AI provider, maintaining the last 8 messages."""
     global _history
+    cfg.load()
     provider = cfg.ai_provider
 
     if provider == "none":
