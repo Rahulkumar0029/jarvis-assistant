@@ -12,7 +12,7 @@ _calibrated = False
 
 def speak(text: str) -> None:
     """Say `text` out loud (and always print it)."""
-    print(f"Jarvis: {text}")
+    print(f"Jarvis: {text}", flush=True)
     try:
         import pyttsx3
 
@@ -54,7 +54,7 @@ def listen(timeout: float = 5, phrase_time_limit: float = 8) -> str:
     try:
         with sr.Microphone() as source:
             if not _calibrated:
-                print("(calibrating for background noise...)")
+                print("(calibrating for background noise...)", flush=True)
                 _recognizer.adjust_for_ambient_noise(source, duration=1)
                 _calibrated = True
             audio = _recognizer.listen(
@@ -70,7 +70,7 @@ def listen(timeout: float = 5, phrase_time_limit: float = 8) -> str:
 
     try:
         text = _recognizer.recognize_google(audio, language="en-IN").lower().strip()
-        print(f"You: {text}")
+        print(f"You: {text}", flush=True)
         return text
     except sr.UnknownValueError:
         return ""
