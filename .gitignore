@@ -1,10 +1,51 @@
+# Environment & Secrets (Never commit credentials)
 .env
+.env.*
+!.env.example
+*.key
+*.pem
+*.cert
+*secret*
+*credential*
+*token*
+
+# AI Agent Context & Instruction Files (Local reading only, do not push)
+.agent/
+.agents/
+.claude/
+.cursor/
+.gemini/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+COPILOT.md
+CURSOR.md
+*AGENT*.md
+*agent*.md
+*agents*.md
+
+# Security Files & Private Notes (Local reading only, do not push)
+SECURITY.md
+security.md
+*security*.md
+*SECURITY*.md
+security/
+*.security.*
+
+# Runtime, logs, and user data
 venv/
 .venv/
 __pycache__/
 *.pyc
 screenshots/
 notes.txt
+*.notes.md
+*notes*.md
 jarvis.log
+*.log
+
+# Editor configurations
 .idea/
 .vscode/
+*.swp
+*.swo
