@@ -158,7 +158,7 @@ def _ask_anthropic(text: str, history: list[dict[str, str]]) -> str:
         return "Add an Anthropic API key to the dot env file, or run python main.py --setup-ai."
 
     try:
-        import anthropic
+        import anthropic  # type: ignore
 
         client = anthropic.Anthropic(api_key=cfg.anthropic_key)
         messages = []
