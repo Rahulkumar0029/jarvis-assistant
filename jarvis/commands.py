@@ -121,9 +121,19 @@ def h_time(text):
 
 def h_open(text):
     m = re.match(r"^(?:please\s+|can you\s+|could you\s+|would you\s+)?(?:open|launch|start|run)\s+(.+)$", text)
-    if not m:
-        return None
-    name = re.sub(r"^(the|my)\s+", "", m.group(1).strip())
+    if m:
+        target = m.group(1).strip()
+    else:
+        # Check if user just spoke an app or site name directly (e.g. "youtube", "whatsapp", "notepad")
+        raw = text.strip()
+        cleaned = re.sub(r"^(the|my)\s+", "", raw)
+        cleaned = re.sub(r"\s+(app|website|site)$", "", cleaned)
+        if cleaned in SITES or cleaned in APPS or re.fullmatch(r"[\w-]+(\.[\w-]+)+", cleaned.replace(" dot ", ".")):
+            target = cleaned
+        else:
+            return None
+
+    name = re.sub(r"^(the|my)\s+", "", target)
     name = re.sub(r"\s+(app|website|site)$", "", name)
 
     if name in SITES:
@@ -139,8 +149,10 @@ def h_open(text):
         speak(f"Opening {name}.")
         webbrowser.open("https://" + name.replace(" dot ", "."))
         return True
-    speak(f"I don't know how to open {name} yet. You can add it in commands dot py.")
-    return True
+    if m:
+        speak(f"I don't know how to open {name} yet. You can add it in commands dot py.")
+        return True
+    return None
 
 
 def h_search(text):
