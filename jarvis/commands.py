@@ -67,7 +67,6 @@ JOKES = [
     "Why did the developer go broke? Because he used up all his cache.",
 ]
 
-_history: list[dict] = []  # short chat memory for the AI fallback
 
 
 # --------------------------------------------------------------------------- #
@@ -307,34 +306,13 @@ HANDLERS = [h_exit, h_help, h_time, h_open, h_search, h_play, h_weather,
 
 
 # --------------------------------------------------------------------------- #
-# AI brain (optional)
+# AI brain (provider-switchable)
 # --------------------------------------------------------------------------- #
 def ai_fallback(text: str):
-    if not cfg.anthropic_key:
-        speak("I didn't understand that. Add an Anthropic API key to the dot env file "
-              "and I can answer anything.")
-        return True
-    try:
-        import anthropic
+    from .ai import ask
 
-        client = anthropic.Anthropic(api_key=cfg.anthropic_key)
-        _history.append({"role": "user", "content": text})
-        resp = client.messages.create(
-            model=cfg.anthropic_model,
-            max_tokens=300,
-            system=(
-                f"You are Jarvis, a voice assistant on {cfg.user_name}'s laptop. Your replies are "
-                "spoken aloud: answer in one to three short sentences, plain text only, no "
-                "markdown, no lists, no emojis."
-            ),
-            messages=_history[-8:],
-        )
-        answer = "".join(b.text for b in resp.content if b.type == "text").strip()
-        _history.append({"role": "assistant", "content": answer})
-        speak(answer or "I have no answer for that.")
-    except Exception as exc:
-        log.warning("AI fallback failed: %s", exc)
-        speak("I couldn't reach my AI brain. Check your API key and internet.")
+    answer = ask(text)
+    speak(answer)
     return True
 
 
