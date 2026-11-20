@@ -31,6 +31,7 @@ SITES = {
     "chatgpt": "https://chat.openai.com",
     "claude": "https://claude.ai",
     "stack overflow": "https://stackoverflow.com",
+    "stackoverflow": "https://stackoverflow.com",
     "netflix": "https://www.netflix.com",
     "maps": "https://maps.google.com",
     "drive": "https://drive.google.com",
@@ -78,7 +79,15 @@ def _run(cmd: str) -> None:
 
 def _confirm(question: str) -> bool:
     speak(question)
-    answer = listen(timeout=5, phrase_time_limit=4)
+    try:
+        answer = listen(timeout=5, phrase_time_limit=4)
+    except Exception:
+        answer = ""
+    if not answer:
+        try:
+            answer = input("Confirm (yes/no): ").strip().lower()
+        except Exception:
+            answer = ""
     return any(w in answer for w in ("yes", "yeah", "confirm", "do it", "sure"))
 
 
@@ -179,7 +188,11 @@ def h_notes(text):
         return True
     if "read my notes" in text or "read notes" in text:
         if cfg.notes_file.exists():
-            lines = cfg.notes_file.read_text(encoding="utf-8").strip().splitlines()[-5:]
+            lines = [l for l in cfg.notes_file.read_text(encoding="utf-8").strip().splitlines() if l.strip()]
+            if not lines:
+                speak("You have no notes yet.")
+                return True
+            lines = lines[-5:]
             speak("Your latest notes. " + " ... ".join(l.split("] ", 1)[-1] for l in lines))
         else:
             speak("You have no notes yet.")

@@ -47,6 +47,9 @@ def run_voice() -> None:
             continue
         wake = next((w for w in cfg.wake_words if w in heard), None)
         if not wake:
+            if "goodbye" in heard:
+                handle("goodbye")
+                break
             continue
 
         command = heard.split(wake, 1)[1].strip(" ,.")
@@ -63,7 +66,19 @@ def run_voice() -> None:
 def list_mics() -> None:
     import speech_recognition as sr
 
-    for i, name in enumerate(sr.Microphone.list_microphone_names()):
+    try:
+        names = sr.Microphone.list_microphone_names()
+    except Exception as exc:
+        print(f"Error accessing microphones: {exc}")
+        print("Please check: Settings > Privacy & security > Microphone")
+        return
+
+    if not names:
+        print("No microphones detected!")
+        print("Please enable your microphone in: Settings > Privacy & security > Microphone")
+        return
+
+    for i, name in enumerate(names):
         print(f"{i}: {name}")
 
 

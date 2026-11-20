@@ -62,10 +62,10 @@ def listen(timeout: float = 5, phrase_time_limit: float = 8) -> str:
             )
     except sr.WaitTimeoutError:
         return ""
-    except OSError as exc:
+    except (OSError, IOError, AttributeError) as exc:
         raise RuntimeError(
             "No microphone found. Check that your mic is plugged in, enabled in "
-            "Windows Settings > Privacy > Microphone, and not used by another app."
+            "Windows Settings > Privacy & security > Microphone, and not used by another app."
         ) from exc
 
     try:
